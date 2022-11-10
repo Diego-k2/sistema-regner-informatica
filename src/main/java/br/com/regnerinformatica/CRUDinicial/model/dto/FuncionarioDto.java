@@ -40,10 +40,10 @@ public class FuncionarioDto {
         funcionarioModel.setNome(this.nome);
         funcionarioModel.setSobrenome(this.sobrenome);
         funcionarioModel.setDtNascimento(new SimpleDateFormat("yyyy/MM/dd").parse(this.dtNascimento));
-        funcionarioModel.setCpf(this.cpf);
+        funcionarioModel.setCpf(this.cpf.replaceAll("[^0-9]+", ""));
         funcionarioModel.setRg(this.rg);
         funcionarioModel.setSetor(this.setor);
-        funcionarioModel.setAtivo(true);
+        funcionarioModel.setIsAtivo("1");
         funcionarioModel.setEmail(this.email);
         funcionarioModel.setSenha(this.senha);
         return funcionarioModel;

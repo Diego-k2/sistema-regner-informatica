@@ -32,7 +32,7 @@ public class FuncionarioModel {
     private String setor;
 
     @Column(nullable = false, length = 155)
-    private boolean isAtivo;
+    private String isAtivo;
 
     @Column(nullable = false, length = 155, unique = true)
     private String email;
@@ -98,12 +98,12 @@ public class FuncionarioModel {
         this.setor = setor;
     }
 
-    public boolean isAtivo() {
+    public String getIsAtivo() {
         return isAtivo;
     }
 
-    public void setAtivo(boolean ativo) {
-        isAtivo = ativo;
+    public void setIsAtivo(String isAtivo) {
+        this.isAtivo = isAtivo;
     }
 
     public String getEmail() {
@@ -121,5 +121,6 @@ public class FuncionarioModel {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+
 
 }
