@@ -2,11 +2,9 @@ package br.com.regnerinformatica.CRUDinicial.model.dto;
 
 import br.com.regnerinformatica.CRUDinicial.model.entity.FuncionarioModel;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class FuncionarioDto {
 
