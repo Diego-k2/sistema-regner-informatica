@@ -58,16 +58,35 @@ public class PlacaMaeController {
     @GetMapping("/fabricante/{fabricante}")
     public ResponseEntity<Object> buscaPorFabricante(@PathVariable String fabricante){
         return !placaMaeService.findAllByFabricante(fabricante.toUpperCase()).isEmpty()?
-                ResponseEntity.status(HttpStatus.OK).body(placaMaeService.findAllByIsAtivo()) :
+                ResponseEntity.status(HttpStatus.OK).body(placaMaeService.findAllByFabricante(fabricante.toUpperCase())) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe nenhuma placa em nosso sistema!");
     }
 
     @GetMapping("/modelo/{modelo}")
     public ResponseEntity<Object> buscaPorModelo(@PathVariable String modelo){
         return !placaMaeService.findAllByModelo(modelo.toUpperCase()).isEmpty()?
-                ResponseEntity.status(HttpStatus.OK).body(placaMaeService.findAllByIsAtivo()) :
+                ResponseEntity.status(HttpStatus.OK).body(placaMaeService.findAllByModelo(modelo.toUpperCase())) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe nenhuma placa em nosso sistema!");
     }
+
+    @PutMapping("/atualiza/modelo/{modelo}/fabricante/{fabricante}")
+    public ResponseEntity<Object> atualizaPlacaMae(@PathVariable String modelo, @PathVariable String fabricante,
+                                                   @RequestBody @Valid PlacaMaeDto placaMaeDto){
+        if(!placaMaeService.existsByModeloAndFabricanteAndIsAtivo(modelo.toUpperCase(), fabricante.toUpperCase())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Placa mãe não existe em nossa base de dados");
+        }
+
+        PlacaMaeModel placaMaeModel = placaMaeService.findByModeloAndFabricante(modelo.toUpperCase(), fabricante.toUpperCase()).get();
+        placaMaeModel.setModelo(placaMaeDto.getModelo());
+        placaMaeModel.setDescricao(placaMaeDto.getDescricao());
+        placaMaeModel.setSoquete(placaMaeDto.getSoquete());
+        placaMaeModel.setGeracao(placaMaeDto.getGeracao());
+        placaMaeModel.setEstoqueAtual(Integer.parseInt(placaMaeDto.getEstoqueAtual()));
+        placaMaeModel.setEstoqueMaximo(Integer.parseInt(placaMaeDto.getEstoqueMaximo()));
+
+        return ResponseEntity.status(HttpStatus.OK).body(placaMaeService.salvaPlacaMae(placaMaeModel));
+    }
+
 
 
     @DeleteMapping("/desativa/modelo/{modelo}/fabricante/{fabricante}")
