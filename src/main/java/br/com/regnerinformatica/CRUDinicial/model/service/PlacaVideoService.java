@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PlacaVideoService {
@@ -26,6 +27,11 @@ public class PlacaVideoService {
     }
 
     @Transactional
+    public boolean existsByModeloAndFabricante(String modelo, String fabricante){
+        return placaVideoRepository.existsByModeloAndFabricante(modelo.toUpperCase(),fabricante.toUpperCase());
+    }
+
+    @Transactional
     public List<PlacaVideoModel> findAllByIsAtivo(){
         return placaVideoRepository.findAllByIsAtivo("1");
     }
@@ -35,7 +41,24 @@ public class PlacaVideoService {
         return placaVideoRepository.findAllByModeloAndIsAtivo(modelo.toUpperCase(), "1");
     }
 
+    @Transactional
+    public List<PlacaVideoModel> findAllByFabricanteAndIsAtivo(String modelo){
+        return placaVideoRepository.findAllByFabricanteAndIsAtivo(modelo.toUpperCase(), "1");
+    }
 
+    @Transactional
+    public Optional<PlacaVideoModel> findByModeloAndFabricanteAndIsAtivo(String modelo, String fabricante){
+        return placaVideoRepository.findByModeloAndFabricanteAndIsAtivo(modelo.toUpperCase(), fabricante.toUpperCase(), "1");
+    }
 
+    @Transactional
+    public void deletePlaca(PlacaVideoModel placaVideoModel){
+         placaVideoRepository.delete(placaVideoModel);
+    }
+
+    @Transactional
+    public Optional<PlacaVideoModel> findByModeloAndFabricante(String modelo, String fabricante){
+        return placaVideoRepository.findByModeloAndFabricante(modelo.toUpperCase(), fabricante.toUpperCase());
+    }
 
 }
