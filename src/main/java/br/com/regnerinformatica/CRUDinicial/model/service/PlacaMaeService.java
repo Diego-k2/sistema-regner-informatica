@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -40,17 +41,17 @@ public class PlacaMaeService {
 
     @Transactional
     public Optional<PlacaMaeModel> findByModeloAndFabricante(String modelo, String fabricante){
-        return placaMaeRepository.findByModeloAndFabricanteAndIsAtivo(modelo, fabricante, "1");
+        return placaMaeRepository.findByModeloAndFabricanteAndIsAtivo(modelo.toUpperCase(), fabricante.toUpperCase(), "1");
     }
 
     @Transactional
     public List<PlacaMaeModel> findAllByFabricante(String fabricante){
-        return placaMaeRepository.findAllByFabricanteAndIsAtivo(fabricante, "1");
+        return placaMaeRepository.findAllByFabricanteAndIsAtivo(fabricante.toUpperCase(), "1");
     }
 
     @Transactional
     public List<PlacaMaeModel> findAllByModelo(String modelo){
-        return placaMaeRepository.findAllByModeloAndIsAtivo(modelo, "1");
+        return placaMaeRepository.findAllByModeloAndIsAtivo(modelo.toUpperCase(), "1");
     }
 
     @Transactional
@@ -60,7 +61,7 @@ public class PlacaMaeService {
 
     @Transactional
     public Optional<PlacaMaeModel> findByFabricanteAndModelo(String fabricante, String modelo){
-        return placaMaeRepository.findByModeloAndFabricante(modelo, fabricante);
+        return placaMaeRepository.findByModeloAndFabricante(modelo.toUpperCase(), fabricante.toUpperCase());
     }
 
 

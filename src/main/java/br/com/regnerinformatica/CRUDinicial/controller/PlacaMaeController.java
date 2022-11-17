@@ -9,7 +9,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Locale;
 
 @RestController
 @RequestMapping("/pecas/placamae")
@@ -33,12 +32,8 @@ public class PlacaMaeController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("MODELO DESTA FABRICANTE JA EXISTE!");
         }
 
-        try {
             PlacaMaeModel placaMaeModel = placaMaeDto.parseToPlacaMae();
-            return ResponseEntity.status(HttpStatus.OK).body(placaMaeService.salvaPlacaMae(placaMaeModel));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        }
+            return ResponseEntity.status(HttpStatus.CREATED).body(placaMaeService.salvaPlacaMae(placaMaeModel));
     }
 
     @GetMapping("/todas")
@@ -50,7 +45,7 @@ public class PlacaMaeController {
 
     @GetMapping("/modelo/{modelo}/fabricante/{fabricante}")
     public ResponseEntity<Object> buscaModeloFabricante(@PathVariable String modelo, @PathVariable String fabricante){
-        return !placaMaeService.findByModeloAndFabricante(modelo.toUpperCase(), fabricante.toUpperCase()).isEmpty()?
+        return !placaMaeService.findByModeloAndFabricante(modelo, fabricante).isEmpty()?
                 ResponseEntity.status(HttpStatus.OK).body(placaMaeService.findAllByIsAtivo()) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe nenhuma placa em nosso sistema!");
     }
@@ -58,25 +53,25 @@ public class PlacaMaeController {
     @GetMapping("/fabricante/{fabricante}")
     public ResponseEntity<Object> buscaPorFabricante(@PathVariable String fabricante){
         return !placaMaeService.findAllByFabricante(fabricante.toUpperCase()).isEmpty()?
-                ResponseEntity.status(HttpStatus.OK).body(placaMaeService.findAllByFabricante(fabricante.toUpperCase())) :
+                ResponseEntity.status(HttpStatus.OK).body(placaMaeService.findAllByFabricante(fabricante)) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe nenhuma placa em nosso sistema!");
     }
 
     @GetMapping("/modelo/{modelo}")
     public ResponseEntity<Object> buscaPorModelo(@PathVariable String modelo){
         return !placaMaeService.findAllByModelo(modelo.toUpperCase()).isEmpty()?
-                ResponseEntity.status(HttpStatus.OK).body(placaMaeService.findAllByModelo(modelo.toUpperCase())) :
+                ResponseEntity.status(HttpStatus.OK).body(placaMaeService.findAllByModelo(modelo)) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe nenhuma placa em nosso sistema!");
     }
 
     @PutMapping("/atualiza/modelo/{modelo}/fabricante/{fabricante}")
     public ResponseEntity<Object> atualizaPlacaMae(@PathVariable String modelo, @PathVariable String fabricante,
                                                    @RequestBody @Valid PlacaMaeDto placaMaeDto){
-        if(!placaMaeService.existsByModeloAndFabricanteAndIsAtivo(modelo.toUpperCase(), fabricante.toUpperCase())){
+        if(!placaMaeService.existsByModeloAndFabricanteAndIsAtivo(modelo, fabricante)){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Placa mãe não existe em nossa base de dados");
         }
 
-        PlacaMaeModel placaMaeModel = placaMaeService.findByModeloAndFabricante(modelo.toUpperCase(), fabricante.toUpperCase()).get();
+        PlacaMaeModel placaMaeModel = placaMaeService.findByModeloAndFabricante(modelo, fabricante).get();
         placaMaeModel.setModelo(placaMaeDto.getModelo());
         placaMaeModel.setDescricao(placaMaeDto.getDescricao());
         placaMaeModel.setSoquete(placaMaeDto.getSoquete());
@@ -97,7 +92,7 @@ public class PlacaMaeController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Placa mãe não consta em nossa base de dados");
         }
 
-        PlacaMaeModel placaMaeModel = placaMaeService.findByModeloAndFabricante(modelo.toUpperCase(), fabricante.toUpperCase()).get();
+        PlacaMaeModel placaMaeModel = placaMaeService.findByModeloAndFabricante(modelo, fabricante).get();
         placaMaeModel.setIsAtivo("0");
         placaMaeService.salvaPlacaMae(placaMaeModel);
 
@@ -112,12 +107,10 @@ public class PlacaMaeController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Placa mãe não consta em nossa base de dados");
         }
 
-        PlacaMaeModel placaMaeModel = placaMaeService.findByFabricanteAndModelo(fabricante.toUpperCase(), modelo.toUpperCase()).get();
+        PlacaMaeModel placaMaeModel = placaMaeService.findByFabricanteAndModelo(fabricante, modelo).get();
 
         placaMaeService.deletaPlaca(placaMaeModel);
         return ResponseEntity.status(HttpStatus.OK).body("Esta placa foi excluida de nosso sistema");
     }
-
-    //TODO IMPLEMENTAR ATUALIZA PLACA
 
     }

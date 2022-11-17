@@ -2,8 +2,6 @@ package br.com.regnerinformatica.CRUDinicial.model.dto;
 
 import br.com.regnerinformatica.CRUDinicial.model.entity.PlacaMaeModel;
 
-import java.util.Locale;
-
 
 public class PlacaMaeDto extends PecasDtoSuperClass {
 
@@ -15,8 +13,14 @@ public class PlacaMaeDto extends PecasDtoSuperClass {
         placaMaeModel.setSoquete(super.getSoquete().toUpperCase());
         placaMaeModel.setGeracao(super.getGeracao());
         placaMaeModel.setFabricante(super.getFabricante().toUpperCase());
-        placaMaeModel.setEstoqueAtual(Integer.parseInt(super.getEstoqueAtual()));
-        placaMaeModel.setEstoqueMaximo(Integer.parseInt(super.getEstoqueMaximo()));
+
+        try {
+            placaMaeModel.setEstoqueAtual(Integer.parseInt(super.getEstoqueAtual()));
+            placaMaeModel.setEstoqueMaximo(Integer.parseInt(super.getEstoqueMaximo()));
+        } catch (Exception e) {
+            placaMaeModel.setEstoqueAtual(-1);
+            placaMaeModel.setEstoqueMaximo(-1);
+        }
         placaMaeModel.setIsAtivo("1");
         return placaMaeModel;
     }
