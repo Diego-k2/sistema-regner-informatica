@@ -6,10 +6,7 @@ import br.com.regnerinformatica.CRUDinicial.model.service.ProcessadorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -38,5 +35,34 @@ public class ProcessadorController {
         ProcessadorModel processadorModel = processadorDto.parseToProcessadorModel();
         return ResponseEntity.status(HttpStatus.CREATED).body(processadorService.saveProcessador(processadorModel));
     }
+
+    @GetMapping("/todos")
+    public ResponseEntity<Object> buscaTodosProcessadores(){
+        return !processadorService.findAllByIsAtivo().isEmpty() ?
+                ResponseEntity.status(HttpStatus.OK).body(processadorService.findAllByIsAtivo()) :
+                ResponseEntity.status(HttpStatus.CONFLICT).body("Não existe nenhum processador em nosso sistema!");
+    }
+
+    @GetMapping("/modelo/{modelo}")
+    public ResponseEntity<Object> buscaPorModelo(@PathVariable String modelo) {
+        return !processadorService.findAllByModeloAndIsAtivo(modelo).isEmpty() ?
+                ResponseEntity.status(HttpStatus.OK).body(processadorService.findAllByModeloAndIsAtivo(modelo)) :
+                ResponseEntity.status(HttpStatus.CONFLICT).body("Não existe nenhum processador em nosso sistema!");
+    }
+
+    @GetMapping("/fabricante/{fabricante}")
+    public ResponseEntity<Object> buscaPorFabricante(@PathVariable String fabricante){
+        return !processadorService.findAllByFabricanteAndIsAtivo(fabricante).isEmpty() ?
+                ResponseEntity.status(HttpStatus.OK).body(processadorService.findAllByFabricanteAndIsAtivo(fabricante)):
+                ResponseEntity.status(HttpStatus.CONFLICT).body("Não existe nenhum processador em nosso sistema!");
+    }
+
+    @GetMapping("/modelo/{modelo}/fabricante/{fabricante}")
+    public ResponseEntity<Object> buscaPorModelEFabricante(@PathVariable String modelo, @PathVariable String fabricante){
+        return !processadorService.findByModeloAndFabricanteAndIsAtivo(modelo,fabricante).isEmpty() ?
+                ResponseEntity.status(HttpStatus.OK).body(processadorService.findByModeloAndFabricanteAndIsAtivo(modelo, fabricante)):
+                ResponseEntity.status(HttpStatus.CONFLICT).body("Não existe nenhum processador em nosso sistema!");
+    }
+
 
 }
