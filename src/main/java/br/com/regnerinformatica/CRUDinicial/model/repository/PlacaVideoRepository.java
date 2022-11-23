@@ -1,6 +1,7 @@
 package br.com.regnerinformatica.CRUDinicial.model.repository;
 
 import br.com.regnerinformatica.CRUDinicial.model.entity.PlacaVideoModel;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,10 +16,13 @@ public interface PlacaVideoRepository extends JpaRepository<PlacaVideoModel, UUI
 
     boolean existsByModeloAndFabricante(String modelo, String fabricante);
 
+    @Cacheable("findAllPlacaVideoIsAtivo")
     List<PlacaVideoModel> findAllByIsAtivo(String isAtivo);
 
+    @Cacheable("findAllPlacaVideoModeloIsAtivo")
     List<PlacaVideoModel> findAllByModeloAndIsAtivo(String modelo, String isAtivo);
 
+    @Cacheable("findAllPlacaVideoFabricanteIsAtivo")
     List<PlacaVideoModel> findAllByFabricanteAndIsAtivo(String modelo, String isAtivo);
 
     Optional<PlacaVideoModel> findByModeloAndFabricanteAndIsAtivo(String modelo, String fabricante, String isAtivo);

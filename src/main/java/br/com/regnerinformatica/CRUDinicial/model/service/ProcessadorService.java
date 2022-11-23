@@ -46,7 +46,15 @@ public class ProcessadorService {
         return processadorRepository.findByModeloAndFabricanteAndIsAtivo(modelo.toUpperCase(), fabricante.toUpperCase(), "1");
     }
 
+    @Transactional
+    public void deleteProcessador(ProcessadorModel processadorModel){
+        processadorRepository.delete(processadorModel);
+    }
 
+    @Transactional
+    public Optional<ProcessadorModel> findByModeloAndFabricante(String modelo, String fabricante){
+        return processadorRepository.findByModeloAndFabricante(modelo, fabricante);
+    }
 
 
 

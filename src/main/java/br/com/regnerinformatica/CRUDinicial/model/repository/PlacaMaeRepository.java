@@ -2,6 +2,7 @@ package br.com.regnerinformatica.CRUDinicial.model.repository;
 
 import br.com.regnerinformatica.CRUDinicial.model.entity.FuncionarioModel;
 import br.com.regnerinformatica.CRUDinicial.model.entity.PlacaMaeModel;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,10 +17,13 @@ public interface PlacaMaeRepository extends JpaRepository<PlacaMaeModel, UUID> {
 
     boolean existsByModeloAndFabricante(String modelo, String fabricante);
 
+    @Cacheable("findAllPlacaMaeIsAtivo")
     List<PlacaMaeModel> findAllByIsAtivo(String isAtivo);
 
+    @Cacheable("findAllPlacaMaeFabricanteIsAtivo")
     List<PlacaMaeModel> findAllByFabricanteAndIsAtivo(String fabricante, String isAtivo);
 
+    @Cacheable("findAllPlacaMaeModeloIsAtivo")
     List<PlacaMaeModel> findAllByModeloAndIsAtivo(String modelo, String isAtivo);
 
     Optional<PlacaMaeModel> findByModeloAndFabricanteAndIsAtivo(String modelo, String fabricante, String isAtivo);

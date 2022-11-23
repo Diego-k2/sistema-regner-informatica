@@ -3,6 +3,7 @@ package br.com.regnerinformatica.CRUDinicial.controller;
 import br.com.regnerinformatica.CRUDinicial.model.dto.ProcessadorDto;
 import br.com.regnerinformatica.CRUDinicial.model.entity.ProcessadorModel;
 import br.com.regnerinformatica.CRUDinicial.model.service.ProcessadorService;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -64,5 +65,59 @@ public class ProcessadorController {
                 ResponseEntity.status(HttpStatus.CONFLICT).body("Não existe nenhum processador em nosso sistema!");
     }
 
+    @PutMapping("/atualiza/modelo/{modelo}/fabricante/{fabricante}")
+    public ResponseEntity<Object> atualizaProcessador(@PathVariable String modelo, @PathVariable String fabricante,
+                                                      @RequestBody ProcessadorDto processadorDto) {
 
+        if(!processadorService.existsByModeloAndFabricanteAndIsAtivo(modelo, fabricante)){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Processador não consta em nossa base de dados");
+        }
+
+        ProcessadorModel processadorModel = processadorService.findByModeloAndFabricanteAndIsAtivo(modelo, fabricante).get();
+
+        processadorModel.setModelo(processadorDto.getModelo());
+        processadorModel.setDescricao(processadorDto.getDescricao());
+        processadorModel.setSoquete(processadorDto.getSoquete());
+        processadorModel.setGeracao(processadorDto.getGeracao());
+        processadorModel.setFabricante(processadorDto.getFabricante());
+        try{
+            processadorModel.setEstoqueAtual(Integer.parseInt(processadorDto.getEstoqueAtual()));
+            processadorModel.setEstoqueMaximo(Integer.parseInt(processadorDto.getEstoqueMaximo()));
+        } catch(Exception e) {
+            processadorModel.setEstoqueAtual(-1);
+            processadorModel.setEstoqueMaximo(-1);
+        }
+        processadorModel.setFrequencia(processadorDto.getFrequencia());
+
+        return ResponseEntity.status(HttpStatus.OK).body(processadorService.saveProcessador(processadorModel));
+    }
+
+    @DeleteMapping("/desativa/modelo/{modelo}/fabricante/{fabricante}")
+    public ResponseEntity<Object> deativaProcessador(@PathVariable String modelo, @PathVariable String fabricante){
+
+        if(!processadorService.existsByModeloAndFabricanteAndIsAtivo(modelo, fabricante)){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Processador não consta em nossa base de dados");
+        }
+
+        ProcessadorModel processadorModel = processadorService.findByModeloAndFabricanteAndIsAtivo(modelo, fabricante).get();
+
+        processadorModel.setIsAtivo("0");
+
+        processadorService.saveProcessador(processadorModel);
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Processador desativado de nosso sistema");
+    }
+
+    @DeleteMapping("/delete/modelo/{modelo}/fabricante/{fabricante}")
+    public ResponseEntity<Object> deletaProcessador(@PathVariable String modelo, @PathVariable String fabricante){
+
+        if(!processadorService.existsByModeloAndFabricanteAndIsAtivo(modelo, fabricante)){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Processador não consta em nossa base de dados");
+        }
+
+        ProcessadorModel processadorModel = processadorService.findByModeloAndFabricante(modelo, fabricante).get();
+        processadorService.deleteProcessador(processadorModel);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Processador deletado de nossa base de dados");
+    }
 }

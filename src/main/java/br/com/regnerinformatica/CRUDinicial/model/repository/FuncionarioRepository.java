@@ -1,6 +1,7 @@
 package br.com.regnerinformatica.CRUDinicial.model.repository;
 
 import br.com.regnerinformatica.CRUDinicial.model.entity.FuncionarioModel;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +20,7 @@ public interface FuncionarioRepository extends JpaRepository<FuncionarioModel, U
 
     Optional<FuncionarioModel> findByCpfAndIsAtivo(String cpf, String isAtivo);
 
+    @Cacheable("findAllByIsAtivo")
     List<FuncionarioModel> findAllByIsAtivo(String isAtivo);
 
     Optional<FuncionarioModel> findByCpf(String cpf);
