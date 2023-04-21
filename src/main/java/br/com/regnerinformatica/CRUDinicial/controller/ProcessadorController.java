@@ -1,4 +1,4 @@
-package controller;
+package br.com.regnerinformatica.CRUDinicial.controller;
 
 import br.com.regnerinformatica.CRUDinicial.model.dto.ProcessadorDto;
 import br.com.regnerinformatica.CRUDinicial.model.entity.ProcessadorModel;

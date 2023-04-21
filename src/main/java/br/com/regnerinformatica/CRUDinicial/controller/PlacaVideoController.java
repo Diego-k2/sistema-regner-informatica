@@ -1,4 +1,4 @@
-package controller;
+package br.com.regnerinformatica.CRUDinicial.controller;
 
 import br.com.regnerinformatica.CRUDinicial.model.dto.PlacaVideoDto;
 import br.com.regnerinformatica.CRUDinicial.model.entity.PlacaVideoModel;
