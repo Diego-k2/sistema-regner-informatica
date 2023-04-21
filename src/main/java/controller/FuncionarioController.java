@@ -1,4 +1,4 @@
-package br.com.regnerinformatica.CRUDinicial.controller;
+package controller;
 
 import br.com.regnerinformatica.CRUDinicial.model.dto.FuncionarioDto;
 import br.com.regnerinformatica.CRUDinicial.model.entity.FuncionarioModel;

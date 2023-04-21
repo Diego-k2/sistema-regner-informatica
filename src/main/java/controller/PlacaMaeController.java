@@ -1,4 +1,4 @@
-package br.com.regnerinformatica.CRUDinicial.controller;
+package controller;
 
 import br.com.regnerinformatica.CRUDinicial.model.dto.PlacaMaeDto;
 import br.com.regnerinformatica.CRUDinicial.model.entity.PlacaMaeModel;
@@ -113,4 +113,4 @@ public class PlacaMaeController {
         return ResponseEntity.status(HttpStatus.OK).body("Esta placa foi excluida de nosso sistema");
     }
 
-    }
+}
