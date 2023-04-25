@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/funcionarios")
 public class FuncionarioController {
 
